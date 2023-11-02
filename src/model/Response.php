@@ -54,7 +54,6 @@ class Response
 			http_response_code(200);
 			$this->_responseData['statusCode'] = $this->_httpStatusCode;
 			$this->_responseData["success"] = $this->_success;
-			$this->addMessage("Success");
 			$this->_responseData["messages"] = $this->_messages;
 			$this->_responseData['data'] = $this->_data;
 		}

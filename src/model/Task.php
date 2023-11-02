@@ -1,7 +1,5 @@
 <?php
 
-require_once('../utils/ValidateDate.php');
-
 class TaskException extends Exception {}
 
 class Task
@@ -54,13 +52,13 @@ class Task
 
 	public function setDeadline($deadline)
 	{
-		echo validateDateFromString($deadline, 'd/m/Y h:i:s');
-		if(!isset($deadline) || !validateDateFromString($deadline, 'd/m/Y h:i:s'))
+		if((!isset($deadline)) && date_format(date_create_from_format('d/m/Y h:i:s', $deadline), 'd/m/Y h:i:s') != $deadline)
 		{
 			throw new TaskException("set deadline exception");
 		}
 
-		$this->_deadline = $deadline;
+		$deadline_obj = new DateTime($deadline);
+		$this->_deadline = $deadline_obj->format('d/m/Y h:i:s');
 	}
 
 	public function setCompleted($completed)

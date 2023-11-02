@@ -52,7 +52,7 @@ class Task
 
 	public function setDeadline($deadline)
 	{
-		if(!isset($deadline) && !date_format($deadline, 'd/m/Y h:i:s'))
+		if(!isset($deadline) && date_format($deadline, 'd/m/Y h:i:s') !== date_create_from_format('d/m/Y h:i:s', $deadline))
 		{
 			throw new TaskException("set deadline exception");
 		}

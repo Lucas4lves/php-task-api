@@ -1,5 +1,7 @@
 <?php
 
+require_once('../utils/ValidateDate.php');
+
 class TaskException extends Exception {}
 
 class Task
@@ -20,7 +22,7 @@ class Task
 		$this->setCompleted($completed);
 	}
 
-	public function setId($value)
+	private function setId($value)
 	{
 		if(!is_numeric($value) || $value <= 0)
 		{
@@ -52,7 +54,8 @@ class Task
 
 	public function setDeadline($deadline)
 	{
-		if(!isset($deadline) && date_format($deadline, 'd/m/Y h:i:s') !== date_create_from_format('d/m/Y h:i:s', $deadline))
+		echo validateDateFromString($deadline, 'd/m/Y h:i:s');
+		if(!isset($deadline) || !validateDateFromString($deadline, 'd/m/Y h:i:s'))
 		{
 			throw new TaskException("set deadline exception");
 		}

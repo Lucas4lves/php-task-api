@@ -31,7 +31,6 @@ class Db
 				$res->setSuccess(false);
 				$res->addMessage("MySQL connection failed with such ERROR " . $ex->getMessage() . PHP_EOL);
 				$res->send(); 
-			
 		}
 	}
 }

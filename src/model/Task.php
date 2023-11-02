@@ -10,14 +10,32 @@ class Task
 	private $_deadline;
 	private $_completed;
 
+	/*
+	 *@param id Primary key for a task. Autoincremented by DB
+	 *@param title A title for a task. Mandatory 
+	 *@param description 
+	 *@param deadline 
+	 *@param completed 
+	 * */
 
-	public function __construct($id, $title, $description, $deadline, $completed)
+
+	public function __construct($id, $title, $description, $deadline, $completed = false)
 	{
 		$this->setId($id);
 		$this->setTitle($title);
 		$this->setDescription($description);
 		$this->setDeadline($deadline);
 		$this->setCompleted($completed);
+	}
+
+
+	public function validateDeadline(string $deadline, string $mask) : bool
+	{
+		$deadline_obj = new DateTime($deadline);
+		if($deadline_obj->format($mask) != date_create_from_format($mask, $deadline)){
+			return false;
+		}
+		return true;
 	}
 
 	private function setId($value)
@@ -52,22 +70,20 @@ class Task
 
 	public function setDeadline($deadline)
 	{
-		if((!isset($deadline)) && date_format(date_create_from_format('d/m/Y h:i:s', $deadline), 'd/m/Y h:i:s') != $deadline)
+		if((!isset($deadline)) && !$this->validateDeadline($deadline, 'm/d/Y h:i:s'))
 		{
 			throw new TaskException("set deadline exception");
 		}
 
 		$deadline_obj = new DateTime($deadline);
-		$this->_deadline = $deadline_obj->format('d/m/Y h:i:s');
+		$this->_deadline = $deadline_obj->format('m/d/Y h:i:s');
 	}
 
 	public function setCompleted($completed)
 	{
-		if(strtoupper($completed) !== 'Y' && strtoupper($completed) !== 'N')
-		{
-			throw new TaskException("Set completed exception");
+		if(!isset($completed) || !is_bool($completed)){
+			throw new TaskException("Complete must be of boolean type");
 		}
-
 		$this->_completed = $completed;
 	}
 
